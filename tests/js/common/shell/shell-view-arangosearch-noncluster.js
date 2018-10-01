@@ -1,5 +1,5 @@
 /*jshint globalstrict:false, strict:false */
-/*global assertEqual, assertTrue, assertEqual, assertNull, assertTypeOf, assertNotEqual, fail */
+/*global assertEqual, assertTrue, assertFalse, assertEqual, assertNull, assertTypeOf, assertNotEqual, fail */
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @brief test the view interface
@@ -30,7 +30,7 @@
 
 var jsunity = require("jsunity");
 var arangodb = require("@arangodb");
-var fs = require('fs')
+var fs = require('fs');
 var ArangoView = arangodb.ArangoView;
 var testHelper = require("@arangodb/test-helper").Helper;
 var db = arangodb.db;
@@ -257,14 +257,14 @@ function ViewSuite () {
     //////////////////////////////////////////////////////////////////////////////////
 
     testViewDirInFSAfterDatabaseDrop : function () {
-      var serverPath = db._path() + "/databases/";
+      var serverPath = fs.join(db._path(), "databases");
       db._createDatabase("testViewDirInFSAfterDatabaseDrop");
       db._useDatabase("testViewDirInFSAfterDatabaseDrop");
-      var dbPath = serverPath + "database-" + db._id();
+      var dbPath = fs.join(serverPath, "database-" + db._id());
 
       db._create("col1");
       var v1 = db._createView("view1", "arangosearch", {});
-      var indexDirPath = dbPath + "/arangosearch-" + v1._id;
+      var indexDirPath = fs.join(dbPath, "arangosearch-" + v1._id);
 
       assertTrue(fs.exists(indexDirPath));
       assertTrue(fs.isDirectory(indexDirPath));
@@ -275,7 +275,6 @@ function ViewSuite () {
       db._dropDatabase("testViewDirInFSAfterDatabaseDrop");
 
       assertFalse(fs.exists(indexDirPath));
-      assertFalse(fs.exists(dbPath));
     }
 
   };
