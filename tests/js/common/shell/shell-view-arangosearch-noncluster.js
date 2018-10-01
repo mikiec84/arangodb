@@ -263,7 +263,7 @@ function ViewSuite () {
       var dbPath = serverPath + "database-" + db._id();
 
       db._create("col1");
-      v1 = db._createView("view1", "arangosearch", {});
+      var v1 = db._createView("view1", "arangosearch", {});
       var indexDirPath = dbPath + "/arangosearch-" + v1._id;
 
       assertTrue(fs.exists(indexDirPath));
