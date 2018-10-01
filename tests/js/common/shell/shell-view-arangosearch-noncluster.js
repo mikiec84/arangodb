@@ -257,10 +257,12 @@ function ViewSuite () {
     //////////////////////////////////////////////////////////////////////////////////
 
     testViewDirInFSAfterDatabaseDrop : function () {
-      var serverPath = fs.join(db._path(), "databases");
+      var serverPath = db._engine().name === "rocksdb" ? fs.join(db._path(), "databases") : "";
+
       db._createDatabase("testViewDirInFSAfterDatabaseDrop");
       db._useDatabase("testViewDirInFSAfterDatabaseDrop");
-      var dbPath = fs.join(serverPath, "database-" + db._id());
+
+      var dbPath = serverPath === "" ? db._path() : fs.join(serverPath, "database-" + db._id());
 
       db._create("col1");
       var v1 = db._createView("view1", "arangosearch", {});
