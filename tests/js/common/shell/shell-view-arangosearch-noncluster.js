@@ -257,14 +257,14 @@ function ViewSuite () {
     //////////////////////////////////////////////////////////////////////////////////
 
     testViewDirInFSAfterDatabaseDrop : function () {
-      var serverPath = fs.join(db._path(), "databases");
+      var serverPath = db._path() + "/databases/";
       db._createDatabase("testViewDirInFSAfterDatabaseDrop");
       db._useDatabase("testViewDirInFSAfterDatabaseDrop");
-      var dbPath = fs.join(serverPath, "database-" + db._id());
+      var dbPath = serverPath + "database-" + db._id();
 
       db._create("col1");
-      var v1 = db._createView("view1", "arangosearch", {});
-      var indexDirPath = fs.join(dbPath, "arangosearch-" + v1._id);
+      v1 = db._createView("view1", "arangosearch", {});
+      var indexDirPath = dbPath + "/arangosearch-" + v1._id;
 
       assertTrue(fs.exists(indexDirPath));
       assertTrue(fs.isDirectory(indexDirPath));
@@ -275,6 +275,7 @@ function ViewSuite () {
       db._dropDatabase("testViewDirInFSAfterDatabaseDrop");
 
       assertFalse(fs.exists(indexDirPath));
+      assertFalse(fs.exists(dbPath));
     }
 
   };
