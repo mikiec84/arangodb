@@ -705,13 +705,11 @@ int DatabaseFeature::dropDatabase(std::string const& name, bool waitForDeletion,
 
     TRI_ASSERT(!vocbase->isSystem());
 
-#if USE_IRESEARCH
     auto viewRv = dropAllViews(*vocbase);
     if (viewRv.fail()){
       LOG_TOPIC(ERR, Logger::ENGINES) << viewRv.errorMessage();
       TRI_ASSERT(false);
     }
-#endif
 
     bool result = vocbase->markAsDropped();
     TRI_ASSERT(result);
